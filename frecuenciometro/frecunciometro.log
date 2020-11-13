@@ -1,0 +1,18 @@
+0	1	mikroCPIC1618.exe -MSF -DBG -pP16F887 -RA -GC -Y -DL -O11111114 -fo1 -N"D:\CODES 2.0\frecuenciometro\frecunciometro.mcppi" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Defs\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Uses\P16\" -SP"D:\CODES 2.0\frecuenciometro\" -IP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Uses\P16\" "frecunciometro.c" "__Lib_Math.mcl" "__Lib_MathDouble.mcl" "__Lib_System.mcl" "__Lib_Delays.mcl" "__Lib_CString.mcl" "__Lib_Conversions.mcl" "__Lib_UART_c67.mcl"	 
+hint: 0	1139	Available RAM: 352 [bytes], Available ROM: 8192 [bytes]	 
+diagnostics: 0	122	Compilation Started	P16F887.c
+diagnostics: 967	123	Compiled Successfully	P16F887.c
+diagnostics: 0	122	Compilation Started	__Lib_Delays.c
+warning: 8	1515	Time too small, no code generated	__Lib_Delays.c
+diagnostics: 123	123	Compiled Successfully	__Lib_Delays.c
+diagnostics: 0	122	Compilation Started	frecunciometro.c
+warning: 28	1509	Generated baud rate is 8929 bps (error = 6.99 percent)	frecunciometro.c
+diagnostics: 37	123	Compiled Successfully	frecunciometro.c
+diagnostics: 0	127	All files Compiled in 109 ms	 
+hint: 0	1144	Used RAM (bytes): 25 (7%)  Free RAM (bytes): 327 (93%)	Used RAM (bytes): 25 (7%)  Free RAM (bytes): 327 (93%)
+hint: 0	1144	Used ROM (program words): 158 (2%)  Free ROM (program words): 8034 (98%)	Used ROM (program words): 158 (2%)  Free ROM (program words): 8034 (98%)
+diagnostics: 0	125	Project Linked Successfully	frecunciometro.mcppi
+hint: 0	1004	COFF file successfully generated	COFF file successfully generated
+diagnostics: 0	128	Linked in 235 ms	 
+diagnostics: 0	129	Project 'frecunciometro.mcppi' completed: 657 ms	 
+diagnostics: 0	103	Finished successfully: 13 nov. 2020, 15:22:25	frecunciometro.mcppi
