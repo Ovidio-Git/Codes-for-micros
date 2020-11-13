@@ -27,7 +27,7 @@ void interrupt(void)
  if(INTCON.T0IF == 1)
  {
  INTCON.T0IF = 0;
- frecuencia++;
+
 
  }
  INTCON.GIE = 1;
@@ -49,21 +49,16 @@ void main(void) {
 
  Lcd_Cmd(_LCD_CLEAR);
  Lcd_Cmd(_LCD_CURSOR_OFF);
- Lcd_Out(1,6,"HOLA PERRA");
 
- Lcd_Out(2,6,"PERRISIMA");
- Delay_ms(2000);
- Lcd_Cmd(_LCD_CLEAR);
-
- Lcd_Out(1,1,"AHORA");
- Lcd_Out(2,5,"PUEDE QUE SI");
+ Lcd_Out(2,4,"FRECUENCIOMETRO:");
 
  while(1)
  {
- PORTD=~PORTD;
- Delay_ms(100);
  ByteToStr(frecuencia, text);
-
+ Lcd_Out(3,7,text);
+ Lcd_Out_CP("HZ");
+ frecuencia++;
+ Delay_ms(500);
  }
 
 }

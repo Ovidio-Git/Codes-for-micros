@@ -26,7 +26,7 @@ void interrupt(void)  //ist
    if(INTCON.T0IF == 1)
    {
       INTCON.T0IF = 0; //Bajar la bandera
-      frecuencia++; //codigo a ehecuta
+     //codigo a ehecuta
 
    }
    INTCON.GIE = 1;//Habilito todas las interrupciones
@@ -48,21 +48,16 @@ void main(void) {
 
     Lcd_Cmd(_LCD_CLEAR);               // Clear display
     Lcd_Cmd(_LCD_CURSOR_OFF);          // Cursor off
-    Lcd_Out(1,6,"HOLA PERRA");                 // Write text in first row
 
-  Lcd_Out(2,6,"PERRISIMA");                 // Write text in second row
-  Delay_ms(2000);
-  Lcd_Cmd(_LCD_CLEAR);               // Clear display
-
-  Lcd_Out(1,1,"AHORA");                 // Write text in first row
-  Lcd_Out(2,5,"PUEDE QUE SI");                 // Write text in second row
+   Lcd_Out(2,4,"FRECUENCIOMETRO:");                 // Write text in second row
 
    while(1)
    {
-    PORTD=~PORTD;
-    Delay_ms(100);
     ByteToStr(frecuencia, text);
-
+    Lcd_Out(3,7,text);
+    Lcd_Out_CP("HZ");
+    frecuencia++;
+    Delay_ms(500);
    }
 
 }

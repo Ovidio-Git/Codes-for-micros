@@ -6,13 +6,14 @@ diagnostics: 0	122	Compilation Started	__Lib_Delays.c
 warning: 8	1515	Time too small, no code generated	__Lib_Delays.c
 diagnostics: 123	123	Compiled Successfully	__Lib_Delays.c
 diagnostics: 0	122	Compilation Started	frecunciometro.c
-warning: 64	1505	Suspicious pointer conversion	frecunciometro.c
-diagnostics: 68	123	Compiled Successfully	frecunciometro.c
-diagnostics: 0	127	All files Compiled in 78 ms	 
-hint: 0	1144	Used RAM (bytes): 60 (17%)  Free RAM (bytes): 292 (83%)	Used RAM (bytes): 60 (17%)  Free RAM (bytes): 292 (83%)
-hint: 0	1144	Used ROM (program words): 557 (7%)  Free ROM (program words): 7635 (93%)	Used ROM (program words): 557 (7%)  Free ROM (program words): 7635 (93%)
+warning: 56	1505	Suspicious pointer conversion	frecunciometro.c
+warning: 57	1505	Suspicious pointer conversion	frecunciometro.c
+diagnostics: 63	123	Compiled Successfully	frecunciometro.c
+diagnostics: 0	127	All files Compiled in 93 ms	 
+hint: 0	1144	Used RAM (bytes): 40 (11%)  Free RAM (bytes): 312 (89%)	Used RAM (bytes): 40 (11%)  Free RAM (bytes): 312 (89%)
+hint: 0	1144	Used ROM (program words): 467 (6%)  Free ROM (program words): 7725 (94%)	Used ROM (program words): 467 (6%)  Free ROM (program words): 7725 (94%)
 diagnostics: 0	125	Project Linked Successfully	frecunciometro.mcppi
 hint: 0	1004	COFF file successfully generated	COFF file successfully generated
-diagnostics: 0	128	Linked in 219 ms	 
-diagnostics: 0	129	Project 'frecunciometro.mcppi' completed: 531 ms	 
-diagnostics: 0	103	Finished successfully: 13 nov. 2020, 17:27:49	frecunciometro.mcppi
+diagnostics: 0	128	Linked in 250 ms	 
+diagnostics: 0	129	Project 'frecunciometro.mcppi' completed: 625 ms	 
+diagnostics: 0	103	Finished successfully: 13 nov. 2020, 17:40:51	frecunciometro.mcppi

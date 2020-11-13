@@ -20,4 +20,10 @@ main
 				Delay_50us
 	ByteToStr
 		Div_8X8_U
+	Lcd_Out_CP
+		Lcd_Chr_CP
+			Lcd_Cmd
+				Delay_1us
+				Delay_5500us
+				Delay_50us
 interrupt

@@ -16,17 +16,13 @@ _interrupt:
 	GOTO       L_interrupt0
 ;frecunciometro.c,28 :: 		INTCON.T0IF = 0; //Bajar la bandera
 	BCF        INTCON+0, 2
-;frecunciometro.c,29 :: 		frecuencia++; //codigo a ehecuta
-	INCF       _frecuencia+0, 1
-	BTFSC      STATUS+0, 2
-	INCF       _frecuencia+1, 1
 ;frecunciometro.c,31 :: 		}
 L_interrupt0:
 ;frecunciometro.c,32 :: 		INTCON.GIE = 1;//Habilito todas las interrupciones
 	BSF        INTCON+0, 7
 ;frecunciometro.c,33 :: 		}
 L_end_interrupt:
-L__interrupt6:
+L__interrupt5:
 	MOVF       ___savePCLATH+0, 0
 	MOVWF      PCLATH+0
 	SWAPF      ___saveSTATUS+0, 0
@@ -67,158 +63,89 @@ _main:
 	MOVLW      12
 	MOVWF      FARG_Lcd_Cmd_out_char+0
 	CALL       _Lcd_Cmd+0
-;frecunciometro.c,51 :: 		Lcd_Out(1,6,"HOLA PERRA");                 // Write text in first row
-	MOVLW      1
+;frecunciometro.c,52 :: 		Lcd_Out(2,4,"FRECUENCIOMETRO:");                 // Write text in second row
+	MOVLW      2
 	MOVWF      FARG_Lcd_Out_row+0
-	MOVLW      6
+	MOVLW      4
 	MOVWF      FARG_Lcd_Out_column+0
-	MOVLW      72
+	MOVLW      70
 	MOVWF      ?lstr1_frecunciometro+0
-	MOVLW      79
+	MOVLW      82
 	MOVWF      ?lstr1_frecunciometro+1
-	MOVLW      76
-	MOVWF      ?lstr1_frecunciometro+2
-	MOVLW      65
-	MOVWF      ?lstr1_frecunciometro+3
-	MOVLW      32
-	MOVWF      ?lstr1_frecunciometro+4
-	MOVLW      80
-	MOVWF      ?lstr1_frecunciometro+5
 	MOVLW      69
+	MOVWF      ?lstr1_frecunciometro+2
+	MOVLW      67
+	MOVWF      ?lstr1_frecunciometro+3
+	MOVLW      85
+	MOVWF      ?lstr1_frecunciometro+4
+	MOVLW      69
+	MOVWF      ?lstr1_frecunciometro+5
+	MOVLW      78
 	MOVWF      ?lstr1_frecunciometro+6
-	MOVLW      82
+	MOVLW      67
 	MOVWF      ?lstr1_frecunciometro+7
-	MOVLW      82
+	MOVLW      73
 	MOVWF      ?lstr1_frecunciometro+8
-	MOVLW      65
+	MOVLW      79
 	MOVWF      ?lstr1_frecunciometro+9
-	CLRF       ?lstr1_frecunciometro+10
+	MOVLW      77
+	MOVWF      ?lstr1_frecunciometro+10
+	MOVLW      69
+	MOVWF      ?lstr1_frecunciometro+11
+	MOVLW      84
+	MOVWF      ?lstr1_frecunciometro+12
+	MOVLW      82
+	MOVWF      ?lstr1_frecunciometro+13
+	MOVLW      79
+	MOVWF      ?lstr1_frecunciometro+14
+	MOVLW      58
+	MOVWF      ?lstr1_frecunciometro+15
+	CLRF       ?lstr1_frecunciometro+16
 	MOVLW      ?lstr1_frecunciometro+0
 	MOVWF      FARG_Lcd_Out_text+0
 	CALL       _Lcd_Out+0
-;frecunciometro.c,53 :: 		Lcd_Out(2,6,"PERRISIMA");                 // Write text in second row
-	MOVLW      2
-	MOVWF      FARG_Lcd_Out_row+0
-	MOVLW      6
-	MOVWF      FARG_Lcd_Out_column+0
-	MOVLW      80
-	MOVWF      ?lstr2_frecunciometro+0
-	MOVLW      69
-	MOVWF      ?lstr2_frecunciometro+1
-	MOVLW      82
-	MOVWF      ?lstr2_frecunciometro+2
-	MOVLW      82
-	MOVWF      ?lstr2_frecunciometro+3
-	MOVLW      73
-	MOVWF      ?lstr2_frecunciometro+4
-	MOVLW      83
-	MOVWF      ?lstr2_frecunciometro+5
-	MOVLW      73
-	MOVWF      ?lstr2_frecunciometro+6
-	MOVLW      77
-	MOVWF      ?lstr2_frecunciometro+7
-	MOVLW      65
-	MOVWF      ?lstr2_frecunciometro+8
-	CLRF       ?lstr2_frecunciometro+9
-	MOVLW      ?lstr2_frecunciometro+0
-	MOVWF      FARG_Lcd_Out_text+0
-	CALL       _Lcd_Out+0
-;frecunciometro.c,54 :: 		Delay_ms(2000);
-	MOVLW      3
-	MOVWF      R11+0
-	MOVLW      138
-	MOVWF      R12+0
-	MOVLW      85
-	MOVWF      R13+0
+;frecunciometro.c,54 :: 		while(1)
 L_main1:
-	DECFSZ     R13+0, 1
-	GOTO       L_main1
-	DECFSZ     R12+0, 1
-	GOTO       L_main1
-	DECFSZ     R11+0, 1
-	GOTO       L_main1
-	NOP
-	NOP
-;frecunciometro.c,55 :: 		Lcd_Cmd(_LCD_CLEAR);               // Clear display
-	MOVLW      1
-	MOVWF      FARG_Lcd_Cmd_out_char+0
-	CALL       _Lcd_Cmd+0
-;frecunciometro.c,57 :: 		Lcd_Out(1,1,"AHORA");                 // Write text in first row
-	MOVLW      1
-	MOVWF      FARG_Lcd_Out_row+0
-	MOVLW      1
-	MOVWF      FARG_Lcd_Out_column+0
-	MOVLW      65
-	MOVWF      ?lstr3_frecunciometro+0
-	MOVLW      72
-	MOVWF      ?lstr3_frecunciometro+1
-	MOVLW      79
-	MOVWF      ?lstr3_frecunciometro+2
-	MOVLW      82
-	MOVWF      ?lstr3_frecunciometro+3
-	MOVLW      65
-	MOVWF      ?lstr3_frecunciometro+4
-	CLRF       ?lstr3_frecunciometro+5
-	MOVLW      ?lstr3_frecunciometro+0
-	MOVWF      FARG_Lcd_Out_text+0
-	CALL       _Lcd_Out+0
-;frecunciometro.c,58 :: 		Lcd_Out(2,5,"PUEDE QUE SI");                 // Write text in second row
-	MOVLW      2
-	MOVWF      FARG_Lcd_Out_row+0
-	MOVLW      5
-	MOVWF      FARG_Lcd_Out_column+0
-	MOVLW      80
-	MOVWF      ?lstr4_frecunciometro+0
-	MOVLW      85
-	MOVWF      ?lstr4_frecunciometro+1
-	MOVLW      69
-	MOVWF      ?lstr4_frecunciometro+2
-	MOVLW      68
-	MOVWF      ?lstr4_frecunciometro+3
-	MOVLW      69
-	MOVWF      ?lstr4_frecunciometro+4
-	MOVLW      32
-	MOVWF      ?lstr4_frecunciometro+5
-	MOVLW      81
-	MOVWF      ?lstr4_frecunciometro+6
-	MOVLW      85
-	MOVWF      ?lstr4_frecunciometro+7
-	MOVLW      69
-	MOVWF      ?lstr4_frecunciometro+8
-	MOVLW      32
-	MOVWF      ?lstr4_frecunciometro+9
-	MOVLW      83
-	MOVWF      ?lstr4_frecunciometro+10
-	MOVLW      73
-	MOVWF      ?lstr4_frecunciometro+11
-	CLRF       ?lstr4_frecunciometro+12
-	MOVLW      ?lstr4_frecunciometro+0
-	MOVWF      FARG_Lcd_Out_text+0
-	CALL       _Lcd_Out+0
-;frecunciometro.c,60 :: 		while(1)
-L_main2:
-;frecunciometro.c,62 :: 		PORTD=~PORTD;
-	COMF       PORTD+0, 1
-;frecunciometro.c,63 :: 		Delay_ms(100);
-	MOVLW      33
-	MOVWF      R12+0
-	MOVLW      118
-	MOVWF      R13+0
-L_main4:
-	DECFSZ     R13+0, 1
-	GOTO       L_main4
-	DECFSZ     R12+0, 1
-	GOTO       L_main4
-	NOP
-;frecunciometro.c,64 :: 		ByteToStr(frecuencia, text);
+;frecunciometro.c,56 :: 		ByteToStr(frecuencia, text);
 	MOVF       _frecuencia+0, 0
 	MOVWF      FARG_ByteToStr_input+0
 	MOVLW      _text+0
 	MOVWF      FARG_ByteToStr_output+0
 	CALL       _ByteToStr+0
-;frecunciometro.c,66 :: 		}
-	GOTO       L_main2
-;frecunciometro.c,68 :: 		}
+;frecunciometro.c,57 :: 		Lcd_Out(3,7,text);
+	MOVLW      3
+	MOVWF      FARG_Lcd_Out_row+0
+	MOVLW      7
+	MOVWF      FARG_Lcd_Out_column+0
+	MOVLW      _text+0
+	MOVWF      FARG_Lcd_Out_text+0
+	CALL       _Lcd_Out+0
+;frecunciometro.c,58 :: 		Lcd_Out_CP("HZ");
+	MOVLW      72
+	MOVWF      ?lstr2_frecunciometro+0
+	MOVLW      90
+	MOVWF      ?lstr2_frecunciometro+1
+	CLRF       ?lstr2_frecunciometro+2
+	MOVLW      ?lstr2_frecunciometro+0
+	MOVWF      FARG_Lcd_Out_CP_text+0
+	CALL       _Lcd_Out_CP+0
+;frecunciometro.c,59 :: 		frecuencia++;
+	INCF       _frecuencia+0, 1
+	BTFSC      STATUS+0, 2
+	INCF       _frecuencia+1, 1
+;frecunciometro.c,60 :: 		Delay_ms(500);
+	MOVLW      163
+	MOVWF      R12+0
+	MOVLW      85
+	MOVWF      R13+0
+L_main3:
+	DECFSZ     R13+0, 1
+	GOTO       L_main3
+	DECFSZ     R12+0, 1
+	GOTO       L_main3
+;frecunciometro.c,61 :: 		}
+	GOTO       L_main1
+;frecunciometro.c,63 :: 		}
 L_end_main:
 	GOTO       $+0
 ; end of _main
