@@ -255,6 +255,7 @@ cren
 cren_bit
 csrc
 csrc_bit
+ctrl
 d
 d_a
 d_a_bit
@@ -537,6 +538,7 @@ portc
 portd
 porte
 pr2
+printf
 prsen
 prsen_bit
 ps0

@@ -1,4 +1,3 @@
-unsigned int frecuencia=0,text[4]={0};
 
 // LCD module connections
 sbit LCD_RS at RC4_bit;
@@ -16,48 +15,71 @@ sbit LCD_D6_Direction at TRISC2_bit;
 sbit LCD_D7_Direction at TRISC3_bit;
 // End LCD module connections
 
+/////////////////////////////////////////////////////////////////////////////////////////////
 
+unsigned int frecuencia=0;
+unsigned char ctrl[2]={0},printf=0,text[6]={0};
 
-
+//////////////////////////////////////////////////////////////////////////////////////////////
 
 void interrupt(void)  //ist
 {
    INTCON.GIE = 0; //Deshabilito todas las interrupciones
    if(INTCON.T0IF == 1)
-   {
+   {  
       INTCON.T0IF = 0; //Bajar la bandera
-     //codigo a ehecuta
+      PORTD=~PORTD;
+      ctrl[0]++;
 
    }
    INTCON.GIE = 1;//Habilito todas las interrupciones
 }
 
-
-void main(void) {
-
-   TRISA = 0X00;
-   ANSELH = 0X00;
-   TRISD = 0X00;
-   PORTD = 0X00;
-   OPTION_REG = 0x3F;
+///////////////////////////////////////////////////////////////////////////////////////////////
+int main(void)
+{
+   TRISB=0x00;
+   TRISA  = 0xFF;
+   PORTA  = 0x00;
+   ANSELH = 0x00;
+   TRISD  = 0x00;
+   PORTD  = 0x00;
+   OPTION_REG = 0x27;
    INTCON =   0xA0;
-   TMR0 = 0x00;
+   TMR0   = 0x00;
    OPTION_REG.T0CS = 0; //HABILITO EL TIMER
 
-    Lcd_Init();                        // Initialize LCD
-
-    Lcd_Cmd(_LCD_CLEAR);               // Clear display
-    Lcd_Cmd(_LCD_CURSOR_OFF);          // Cursor off
-
-   Lcd_Out(2,4,"FRECUENCIOMETRO:");                 // Write text in second row
+   Lcd_Init();                        // Initialize LCD
+   Lcd_Cmd(_LCD_CLEAR);               // Clear display
+   Lcd_Cmd(_LCD_CURSOR_OFF);          // Cursor off
+   Lcd_Out(2,5,"FRECUENCIA:");                 // Write text in second row
 
    while(1)
-   {
-    ByteToStr(frecuencia, text);
-    Lcd_Out(3,7,text);
-    Lcd_Out_CP("HZ");
-    frecuencia++;
-    Delay_ms(500);
-   }
+   {    
+        if (RA4_bit==1 && ctrl[1]==0)
+        {
+        frecuencia++;
+        RB1_bit=1;
+        ctrl[1]=1;
+        }
+        if (RA4_bit==0){
+        ctrl[1]=0;
+        RB1_bit=0;
+        }
+        
 
+        if (ctrl[0]==4)
+        {
+        ctrl[0]=0;
+        printf=1;
+        RB0_bit=0x01;
+        }else {RB0_bit=0x00;}
+        if (printf==1)
+        {
+           IntToStr(frecuencia, text);
+           Lcd_Out(3,5,text);
+           Lcd_Out_CP("HZ");
+           return -1;
+        }
+    }
 }

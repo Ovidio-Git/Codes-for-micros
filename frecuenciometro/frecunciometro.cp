@@ -1,5 +1,4 @@
 #line 1 "D:/CODES 2.0/frecuenciometro/frecunciometro.c"
-unsigned int frecuencia=0,text[4]={0};
 
 
 sbit LCD_RS at RC4_bit;
@@ -19,6 +18,9 @@ sbit LCD_D7_Direction at TRISC3_bit;
 
 
 
+unsigned int frecuencia=0;
+unsigned char ctrl[2]={0},printf=0,text[6]={0};
+
 
 
 void interrupt(void)
@@ -27,38 +29,58 @@ void interrupt(void)
  if(INTCON.T0IF == 1)
  {
  INTCON.T0IF = 0;
-
+ PORTD=~PORTD;
+ ctrl[0]++;
 
  }
  INTCON.GIE = 1;
 }
 
 
-void main(void) {
-
- TRISA = 0X00;
- ANSELH = 0X00;
- TRISD = 0X00;
- PORTD = 0X00;
- OPTION_REG = 0x3F;
+int main(void)
+{
+ TRISB=0x00;
+ TRISA = 0xFF;
+ PORTA = 0x00;
+ ANSELH = 0x00;
+ TRISD = 0x00;
+ PORTD = 0x00;
+ OPTION_REG = 0x27;
  INTCON = 0xA0;
  TMR0 = 0x00;
  OPTION_REG.T0CS = 0;
 
  Lcd_Init();
-
  Lcd_Cmd(_LCD_CLEAR);
  Lcd_Cmd(_LCD_CURSOR_OFF);
-
- Lcd_Out(2,4,"FRECUENCIOMETRO:");
+ Lcd_Out(2,5,"FRECUENCIA:");
 
  while(1)
  {
- ByteToStr(frecuencia, text);
- Lcd_Out(3,7,text);
- Lcd_Out_CP("HZ");
+ if (RA4_bit==1 && ctrl[1]==0)
+ {
  frecuencia++;
- Delay_ms(500);
+ RB1_bit=1;
+ ctrl[1]=1;
+ }
+ if (RA4_bit==0){
+ ctrl[1]=0;
+ RB1_bit=0;
  }
 
+
+ if (ctrl[0]==4)
+ {
+ ctrl[0]=0;
+ printf=1;
+ RB0_bit=0x01;
+ }else {RB0_bit=0x00;}
+ if (printf==1)
+ {
+ IntToStr(frecuencia, text);
+ Lcd_Out(3,5,text);
+ Lcd_Out_CP("HZ");
+ return -1;
+ }
+ }
 }

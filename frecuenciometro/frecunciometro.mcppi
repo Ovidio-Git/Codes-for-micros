@@ -33,7 +33,8 @@ Count=0
 [OTHER_FILES]
 Count=0
 [SEARCH_PATH]
-Count=0
+Path0=C:\Users\OVIDIO\Desktop\
+Count=1
 [HEADER_PATH]
 Count=0
 [HEADERS]
@@ -47,43 +48,12 @@ File2=Lcd
 File3=Lcd_Constants
 Count=4
 [EXPANDED_NODES]
-Count=0
+0=frecunciometro.mcppi
+Count=1
 [LIB_EXPANDED_NODES]
 0=mikroE Libraries
 1=System Libraries
-2=ADC
-7=Button
-9=CAN_SPI
-18=Compact_Flash
-30=Conversions
-70=C_Math
-92=C_Stdlib
-106=C_String
-132=C_Type
-148=EPSON_S1D13700
-181=FLASH
-184=Glcd
-215=I2C
-231=Keypad4x4
-235=Lcd
-243=Manchester
-253=MemManager
-263=Port_Expander
-296=PWM
-305=RS485
-323=Software_UART
-328=Sound
-339=SPI_Ethernet
-377=SPI_Ethernet_24j600
-416=SPI_Glcd
-446=SPI_Lcd
-453=SPI_Lcd8
-460=SPI_T6963C
-494=Sprintl
-497=T6963C
-528=TouchPanel
-540=UART
-Count=34
+Count=2
 [PROGRAMMER_TYPE]
 Value=mikroE mikroProg
 [CODEGRIP_OPTIONS]
