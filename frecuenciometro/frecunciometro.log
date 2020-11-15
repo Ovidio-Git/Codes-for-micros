@@ -11,6 +11,12 @@ hint: 0	1144	Used RAM (bytes): 41 (12%)  Free RAM (bytes): 311 (88%)	Used RAM (b
 hint: 0	1144	Used ROM (program words): 594 (7%)  Free ROM (program words): 7598 (93%)	Used ROM (program words): 594 (7%)  Free ROM (program words): 7598 (93%)
 diagnostics: 0	125	Project Linked Successfully	frecunciometro.mcppi
 hint: 0	1004	COFF file successfully generated	COFF file successfully generated
+<<<<<<< HEAD
 diagnostics: 0	128	Linked in 250 ms	 
 diagnostics: 0	129	Project 'frecunciometro.mcppi' completed: 766 ms	 
 diagnostics: 0	103	Finished successfully: 15 nov. 2020, 01:58:37	frecunciometro.mcppi
+=======
+diagnostics: 0	128	Linked in 235 ms	 
+diagnostics: 0	129	Project 'frecunciometro.mcppi' completed: 547 ms	 
+diagnostics: 0	103	Finished successfully: 15 nov. 2020, 01:55:50	frecunciometro.mcppi
+>>>>>>> testing
