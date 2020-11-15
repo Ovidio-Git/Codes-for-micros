@@ -1,17 +1,16 @@
-0	1	mikroCPIC1618.exe -MSF -DBG -pP16F887 -RA -GC -Y -DL -O11111114 -fo1 -N"D:\CODES 2.0\frecuenciometro\frecunciometro.mcppi" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Defs\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Uses\P16\" -SP"D:\CODES 2.0\frecuenciometro\" -SP"C:\Users\OVIDIO\Desktop\" -IP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Uses\P16\" "frecunciometro.c" "__Lib_Math.mcl" "__Lib_MathDouble.mcl" "__Lib_System.mcl" "__Lib_Delays.mcl" "__Lib_CString.mcl" "__Lib_Conversions.mcl" "__Lib_LcdConsts.mcl" "__Lib_Lcd.mcl"	 
+0	1	mikroCPIC1618.exe -MSF -DBG -pP16F887 -RA -GC -Y -DL -O11111114 -fo4 -N"D:\CODES 2.0\frecuenciometro\frecunciometro.mcppi" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Defs\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Uses\P16\" -SP"D:\CODES 2.0\frecuenciometro\" -SP"C:\Users\OVIDIO\Desktop\" -IP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Uses\P16\" "frecunciometro.c" "__Lib_Math.mcl" "__Lib_MathDouble.mcl" "__Lib_System.mcl" "__Lib_Delays.mcl" "__Lib_CString.mcl" "__Lib_Conversions.mcl" "__Lib_LcdConsts.mcl" "__Lib_Lcd.mcl"	 
 hint: 0	1139	Available RAM: 352 [bytes], Available ROM: 8192 [bytes]	 
 diagnostics: 0	122	Compilation Started	P16F887.c
 diagnostics: 967	123	Compiled Successfully	P16F887.c
 diagnostics: 0	122	Compilation Started	__Lib_Delays.c
-warning: 8	1515	Time too small, no code generated	__Lib_Delays.c
 diagnostics: 123	123	Compiled Successfully	__Lib_Delays.c
 diagnostics: 0	122	Compilation Started	frecunciometro.c
-diagnostics: 85	123	Compiled Successfully	frecunciometro.c
-diagnostics: 0	127	All files Compiled in 109 ms	 
-hint: 0	1144	Used RAM (bytes): 45 (13%)  Free RAM (bytes): 307 (87%)	Used RAM (bytes): 45 (13%)  Free RAM (bytes): 307 (87%)
-hint: 0	1144	Used ROM (program words): 623 (8%)  Free ROM (program words): 7569 (92%)	Used ROM (program words): 623 (8%)  Free ROM (program words): 7569 (92%)
+diagnostics: 75	123	Compiled Successfully	frecunciometro.c
+diagnostics: 0	127	All files Compiled in 94 ms	 
+hint: 0	1144	Used RAM (bytes): 41 (12%)  Free RAM (bytes): 311 (88%)	Used RAM (bytes): 41 (12%)  Free RAM (bytes): 311 (88%)
+hint: 0	1144	Used ROM (program words): 594 (7%)  Free ROM (program words): 7598 (93%)	Used ROM (program words): 594 (7%)  Free ROM (program words): 7598 (93%)
 diagnostics: 0	125	Project Linked Successfully	frecunciometro.mcppi
 hint: 0	1004	COFF file successfully generated	COFF file successfully generated
-diagnostics: 0	128	Linked in 281 ms	 
-diagnostics: 0	129	Project 'frecunciometro.mcppi' completed: 687 ms	 
-diagnostics: 0	103	Finished successfully: 14 nov. 2020, 13:07:50	frecunciometro.mcppi
+diagnostics: 0	128	Linked in 250 ms	 
+diagnostics: 0	129	Project 'frecunciometro.mcppi' completed: 766 ms	 
+diagnostics: 0	103	Finished successfully: 15 nov. 2020, 01:58:37	frecunciometro.mcppi
