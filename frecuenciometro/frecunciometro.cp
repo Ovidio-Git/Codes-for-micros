@@ -16,11 +16,7 @@ sbit LCD_D6_Direction at TRISD2_bit;
 sbit LCD_D7_Direction at TRISD3_bit;
 
 
-
-
-unsigned int frecuencia=0;
-unsigned char ctrl[2]={0x00,0x00},printf=0,text[6]={0};
-
+unsigned char ctrl=0,printf=0,text[5]={0};
 
 
 void interrupt(void)
@@ -29,17 +25,7 @@ void interrupt(void)
  if(INTCON.T0IF == 1 )
  {
  INTCON.T0IF = 0;
- ctrl[0]++;
- }
- INTCON.GIE = 1;
-
- INTCON.GIE = 0;
- if (TMR1IF_bit==1){
- TMR1IF_bit = 0;
- TMR1H = 0xFF;
- TMR1L = 0x00;
- frecuencia++;
-
+ ctrl++;
  }
  INTCON.GIE = 1;
 }
@@ -49,16 +35,14 @@ int main(void)
 {
 
  TRISC = 0x00;
- PORTC=0x00;
- OPTION_REG = 0x27;
- T1CON=0x07;
+ PORTC = 0x00;
+ OPTION_REG = 0x24;
+ T1CON = 0x03;
  TMR0 = 0;
  OPTION_REG.T0CS = 0;
  INTCON = 0xE0;
- PIE1=0x01;
  TMR1H = 0xFF;
  TMR1L = 0x00;
- TMR1IF_bit=0;
 
 
 
@@ -69,18 +53,23 @@ int main(void)
 
  while(1)
  {
- if (ctrl[0]==16)
+
+
+
+
+
+
+
+ if (ctrl==123)
  {
- ctrl[0]=0;
  printf=1;
  }
-
  if (printf==1)
  {
  IntToStr(TMR1L, text);
  Lcd_Out(3,5,text);
  Lcd_Out_CP("HZ");
- return -1;
+ return 1;
  }
 
  }

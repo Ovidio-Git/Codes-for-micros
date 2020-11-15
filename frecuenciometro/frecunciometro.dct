@@ -332,7 +332,6 @@ ferr_bit
 fixsign32
 floattostr
 floattostr_fixlen
-frecuencia
 fsr
 fsrptr
 fvren
