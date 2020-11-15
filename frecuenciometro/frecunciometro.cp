@@ -19,19 +19,18 @@ sbit LCD_D7_Direction at TRISC3_bit;
 
 
 unsigned int frecuencia=0;
-unsigned char ctrl[2]={0},printf=0,text[6]={0};
+unsigned char ctrl[2]={0x00,0x00},printf=0,text[6]={0};
 
 
 
 void interrupt(void)
 {
  INTCON.GIE = 0;
- if(INTCON.T0IF == 1)
+ if(INTCON.T0IF == 1 )
  {
  INTCON.T0IF = 0;
  PORTD=~PORTD;
  ctrl[0]++;
-
  }
  INTCON.GIE = 1;
 }
@@ -39,7 +38,7 @@ void interrupt(void)
 
 int main(void)
 {
- TRISB=0x00;
+ TRISB = 0x00;
  TRISA = 0xFF;
  PORTA = 0x00;
  ANSELH = 0x00;
@@ -47,7 +46,7 @@ int main(void)
  PORTD = 0x00;
  OPTION_REG = 0x27;
  INTCON = 0xA0;
- TMR0 = 0x00;
+ TMR0 = 0;
  OPTION_REG.T0CS = 0;
 
  Lcd_Init();
@@ -57,24 +56,27 @@ int main(void)
 
  while(1)
  {
- if (RA4_bit==1 && ctrl[1]==0)
+
+ PORTA=~PORTA;
+ if (RA4_bit==1 && ctrl[1]==0 )
  {
+ ctrl[1]=1;
  frecuencia++;
  RB1_bit=1;
- ctrl[1]=1;
  }
- if (RA4_bit==0){
+ if (RA4_bit==0 && ctrl[1]==1){
  ctrl[1]=0;
  RB1_bit=0;
  }
 
 
- if (ctrl[0]==4)
+ if (ctrl[0]==16)
  {
  ctrl[0]=0;
  printf=1;
- RB0_bit=0x01;
- }else {RB0_bit=0x00;}
+ }
+
+
  if (printf==1)
  {
  IntToStr(frecuencia, text);
@@ -82,5 +84,6 @@ int main(void)
  Lcd_Out_CP("HZ");
  return -1;
  }
+
  }
 }
