@@ -22,7 +22,7 @@ unsigned char ctrl=0,printf=0,text[5]={0};
 void interrupt(void)
 {
  INTCON.GIE = 0;
- if(INTCON.T0IF == 1 )
+ if (INTCON.T0IF == 1 )
  {
  INTCON.T0IF = 0;
  ctrl++;
@@ -43,8 +43,6 @@ int main(void)
  INTCON = 0xE0;
  TMR1H = 0xFF;
  TMR1L = 0x00;
-
-
 
  Lcd_Init();
  Lcd_Cmd(_LCD_CLEAR);
@@ -71,6 +69,5 @@ int main(void)
  Lcd_Out_CP("HZ");
  return 1;
  }
-
  }
 }
