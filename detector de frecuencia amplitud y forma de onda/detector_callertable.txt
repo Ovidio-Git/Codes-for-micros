@@ -1,0 +1,13 @@
+main
+	__CC2DW
+		____DoICP
+	UART1_Init
+	UART1_Write_Text
+		UART1_Write
+	IntToStr
+		WordToStr
+			Div_16X16_U
+	printf
+		UART1_Write_Text
+			UART1_Write
+interrupt
