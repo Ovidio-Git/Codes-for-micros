@@ -1,11 +1,44 @@
+/*  EJEMPLO DE LA CLASE
+void main() {
+   char adres_l = 0, adres_h = 0;
+   int pasos = 0;
+   float resol = 0.00488;
+   float resultado = 0;
+   char str[14] = {0};
+   TRISA = 0X01; //RA0 entrada
+   ANSEL = 0x01; //RA0 Analoga
+   ADCON0 = 0X01; // Max Velocidad, Channel AN0, ADC ON
+   ADCON1 = 0X80; //Justificado Derecha, Vref (Vdd - Vss)
+   UART1_Init(9600);
+   Delay_ms(100);
+
+   while(1){
+      ADCON0.GO = 1; //Inicia una conversión
+      while(ADCON0.GO);
+      adres_h = ADRESH & 0x03;
+      adres_l = ADRESL;
+      pasos = (adres_h << 8) + adres_l;
+      resultado = pasos * resol;
+      FloatToStr(resultado, str);
+      UART1_Write_Text(str);
+      UART1_Write_Text("\r\n");
+      Delay_ms(1000);
+   }
+}
+
+*/
+
+
+unsigned char ctrl=0,print=0,text[6]={0};
+unsigned int frecuency = 0;
+
+
 void printf(unsigned char msg[])
 {
  UART1_Write_Text(msg);
 }
 
 
-
-unsigned char ctrl=0,print=0,text[5]={0};
 
 //////////////////////////////     INTERRUPCION     //////////////////////////////////////////
 void interrupt(void)
@@ -30,11 +63,11 @@ int main(void)
     TMR0   = 0;           //inicializando timer0 en 0 para segurar que este limpio
     OPTION_REG.T0CS = 0;  //se habilita el timer 0
     INTCON =   0xE0;      //habilitando las interrupciones del timer0
-    TMR1H  = 0xFF;        //registro de los primeros 8 bits del timer1 se llena ya que solo trabajaremos con TMR1L
+    TMR1H  = 0x00;        //registro de los primeros 8 bits del timer1 se llena ya que solo trabajaremos con TMR1L
     TMR1L  = 0x00;        //registro de los segiundos 8 bits del timer1
 
     UART1_Init(9600);
-    UART1_Write_Text("se arreglo esta mierda");
+    UART1_Write_Text("FRECUENCIA:\n\r");
 
     while(1)
     {
@@ -49,9 +82,11 @@ int main(void)
          {
              print=1;
          }
+
          if (print==1)
          {
-            IntToStr(TMR1L, text); //imprimimos el valor acumulado en TIM1L
+            frecuency= (TMR1H<<8) + (TMR1L);
+            IntToStr(frecuency, text); //imprimimos el valor acumulado en TIM1L
             printf(text);
             printf("HZ\r\n");
             return 1;

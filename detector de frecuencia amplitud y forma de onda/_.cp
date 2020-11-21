@@ -1,12 +1,15 @@
 #line 1 "D:/CODES 2.0/detector de frecuencia amplitud y forma de onda/_.c"
+#line 32 "D:/CODES 2.0/detector de frecuencia amplitud y forma de onda/_.c"
+unsigned char ctrl=0,print=0,text[6]={0};
+unsigned int frecuency = 0;
+
+
 void printf(unsigned char msg[])
 {
  UART1_Write_Text(msg);
 }
 
 
-
-unsigned char ctrl=0,print=0,text[5]={0};
 
 
 void interrupt(void)
@@ -31,11 +34,11 @@ int main(void)
  TMR0 = 0;
  OPTION_REG.T0CS = 0;
  INTCON = 0xE0;
- TMR1H = 0xFF;
+ TMR1H = 0x00;
  TMR1L = 0x00;
 
  UART1_Init(9600);
- UART1_Write_Text("se arreglo esta mierda");
+ UART1_Write_Text("FRECUENCIA:\n\r");
 
  while(1)
  {
@@ -50,9 +53,11 @@ int main(void)
  {
  print=1;
  }
+
  if (print==1)
  {
- IntToStr(TMR1L, text);
+ frecuency= (TMR1H<<8) + (TMR1L);
+ IntToStr(frecuency, text);
  printf(text);
  printf("HZ\r\n");
  return 1;
