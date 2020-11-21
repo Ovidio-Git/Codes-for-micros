@@ -57,7 +57,6 @@ Count=0
 70=C_Math
 106=C_String
 132=C_Type
-148=EPSON_S1D13700
 184=Glcd
 215=I2C
 231=Keypad4x4
@@ -79,7 +78,7 @@ Count=0
 525=Time
 528=TouchPanel
 537=Trigonometry
-Count=31
+Count=30
 [PROGRAMMER_TYPE]
 Value=mikroE mikroProg
 [CODEGRIP_OPTIONS]

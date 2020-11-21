@@ -239,6 +239,7 @@ cren_bit
 csrc
 csrc_bit
 ctrl
+ctrl2
 d
 d_a
 d_a_bit
@@ -315,6 +316,7 @@ ferr_bit
 fixsign32
 floattostr
 floattostr_fixlen
+frecu
 frecuency
 fsr
 fsrptr
@@ -471,6 +473,7 @@ p1m0
 p1m0_bit
 p1m1
 p1m1_bit
+pasos
 pcl
 pclath
 pcon
@@ -647,7 +650,11 @@ re3
 re3_bit
 read_write
 read_write_bit
+registro1
+registro2
 res032
+resolucion
+resultado
 rp0
 rp0_bit
 rp1
@@ -787,6 +794,7 @@ t2ckps0_bit
 t2ckps1
 t2ckps1_bit
 t2con
+temp
 text
 tmr0
 tmr0ie
@@ -940,6 +948,7 @@ ulpwuie
 ulpwuie_bit
 ulpwuif
 ulpwuif_bit
+value
 vcfg0
 vcfg0_bit
 vcfg1
