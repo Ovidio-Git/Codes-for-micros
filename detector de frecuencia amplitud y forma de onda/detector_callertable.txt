@@ -2,9 +2,6 @@ main
 	__CC2DW
 		____DoICP
 	UART1_Init
-	printf
-		UART1_Write_Text
-			UART1_Write
 	word2double
 		NRM3232
 			RES032
@@ -14,6 +11,10 @@ main
 		RES032
 		SETFOV32
 		SETFUN32
+	Compare_Double
+	printf
+		UART1_Write_Text
+			UART1_Write
 	IntToStr
 		WordToStr
 			Div_16X16_U

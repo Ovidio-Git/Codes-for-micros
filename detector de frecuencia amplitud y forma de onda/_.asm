@@ -36,7 +36,7 @@ L_interrupt0:
 	BSF        INTCON+0, 7
 ;_.c,54 :: 		}
 L_end_interrupt:
-L__interrupt18:
+L__interrupt22:
 	MOVF       ___savePCLATH+0, 0
 	MOVWF      PCLATH+0
 	SWAPF      ___saveSTATUS+0, 0
@@ -92,7 +92,159 @@ _main:
 	MOVWF      SPBRG+0
 	BSF        TXSTA+0, 2
 	CALL       _UART1_Init+0
-;_.c,75 :: 		printf("FRECUENCIA:\n\r");
+;_.c,77 :: 		while(1)
+L_main1:
+;_.c,80 :: 		ADCON0.GO=1;//inicia conversion
+	BSF        ADCON0+0, 1
+;_.c,81 :: 		while(ADCON0.GO);
+L_main3:
+	BTFSS      ADCON0+0, 1
+	GOTO       L_main4
+	GOTO       L_main3
+L_main4:
+;_.c,82 :: 		registro1=ADRESH & 0x03; //extraemos los bits del registro adresh
+	MOVLW      3
+	ANDWF      ADRESH+0, 0
+	MOVWF      R3+0
+	MOVF       R3+0, 0
+	MOVWF      _registro1+0
+;_.c,83 :: 		registro2=ADRESL;        //extraemos los bits del registro adresl
+	MOVF       ADRESL+0, 0
+	MOVWF      _registro2+0
+;_.c,84 :: 		pasos= (registro1<<8)+registro2; //calculamos el numero de pasos
+	MOVF       R3+0, 0
+	MOVWF      R0+1
+	CLRF       R0+0
+	MOVF       _registro2+0, 0
+	ADDWF      R0+0, 1
+	BTFSC      STATUS+0, 0
+	INCF       R0+1, 1
+	MOVF       R0+0, 0
+	MOVWF      _pasos+0
+	MOVF       R0+1, 0
+	MOVWF      _pasos+1
+;_.c,85 :: 		resultado=pasos*resolucion;      //realizamos la conversion a voltaje
+	CALL       _word2double+0
+	MOVF       _resolucion+0, 0
+	MOVWF      R4+0
+	MOVF       _resolucion+1, 0
+	MOVWF      R4+1
+	MOVF       _resolucion+2, 0
+	MOVWF      R4+2
+	MOVF       _resolucion+3, 0
+	MOVWF      R4+3
+	CALL       _Mul_32x32_FP+0
+	MOVF       R0+0, 0
+	MOVWF      _resultado+0
+	MOVF       R0+1, 0
+	MOVWF      _resultado+1
+	MOVF       R0+2, 0
+	MOVWF      _resultado+2
+	MOVF       R0+3, 0
+	MOVWF      _resultado+3
+;_.c,89 :: 		if (RD0_bit && ctrl2==0){frecuency++;ctrl2=1;}
+	BTFSS      RD0_bit+0, BitPos(RD0_bit+0)
+	GOTO       L_main7
+	MOVF       _ctrl2+0, 0
+	XORLW      0
+	BTFSS      STATUS+0, 2
+	GOTO       L_main7
+L__main19:
+	INCF       _frecuency+0, 1
+	BTFSC      STATUS+0, 2
+	INCF       _frecuency+1, 1
+	MOVLW      1
+	MOVWF      _ctrl2+0
+	GOTO       L_main8
+L_main7:
+;_.c,90 :: 		else if (RD0_bit==0 && ctrl2==1){ctrl2=0;}
+	BTFSC      RD0_bit+0, BitPos(RD0_bit+0)
+	GOTO       L_main11
+	MOVF       _ctrl2+0, 0
+	XORLW      1
+	BTFSS      STATUS+0, 2
+	GOTO       L_main11
+L__main18:
+	CLRF       _ctrl2+0
+L_main11:
+L_main8:
+;_.c,92 :: 		if (resultado>value && resultado <=5)
+	MOVF       _resultado+0, 0
+	MOVWF      R4+0
+	MOVF       _resultado+1, 0
+	MOVWF      R4+1
+	MOVF       _resultado+2, 0
+	MOVWF      R4+2
+	MOVF       _resultado+3, 0
+	MOVWF      R4+3
+	MOVF       _value+0, 0
+	MOVWF      R0+0
+	MOVF       _value+1, 0
+	MOVWF      R0+1
+	MOVF       _value+2, 0
+	MOVWF      R0+2
+	MOVF       _value+3, 0
+	MOVWF      R0+3
+	CALL       _Compare_Double+0
+	MOVLW      1
+	BTFSC      STATUS+0, 0
+	MOVLW      0
+	MOVWF      R0+0
+	MOVF       R0+0, 0
+	BTFSC      STATUS+0, 2
+	GOTO       L_main14
+	MOVF       _resultado+0, 0
+	MOVWF      R4+0
+	MOVF       _resultado+1, 0
+	MOVWF      R4+1
+	MOVF       _resultado+2, 0
+	MOVWF      R4+2
+	MOVF       _resultado+3, 0
+	MOVWF      R4+3
+	MOVLW      0
+	MOVWF      R0+0
+	MOVLW      0
+	MOVWF      R0+1
+	MOVLW      32
+	MOVWF      R0+2
+	MOVLW      129
+	MOVWF      R0+3
+	CALL       _Compare_Double+0
+	MOVLW      1
+	BTFSS      STATUS+0, 0
+	MOVLW      0
+	MOVWF      R0+0
+	MOVF       R0+0, 0
+	BTFSC      STATUS+0, 2
+	GOTO       L_main14
+L__main17:
+;_.c,94 :: 		value=resultado;
+	MOVF       _resultado+0, 0
+	MOVWF      _value+0
+	MOVF       _resultado+1, 0
+	MOVWF      _value+1
+	MOVF       _resultado+2, 0
+	MOVWF      _value+2
+	MOVF       _resultado+3, 0
+	MOVWF      _value+3
+;_.c,95 :: 		}
+L_main14:
+;_.c,96 :: 		if (ctrl==123)
+	MOVF       _ctrl+0, 0
+	XORLW      123
+	BTFSS      STATUS+0, 2
+	GOTO       L_main15
+;_.c,98 :: 		print=1;
+	MOVLW      1
+	MOVWF      _print+0
+;_.c,99 :: 		}
+L_main15:
+;_.c,102 :: 		if (print==1)
+	MOVF       _print+0, 0
+	XORLW      1
+	BTFSS      STATUS+0, 2
+	GOTO       L_main16
+;_.c,104 :: 		printf("FRECUENCIA:\n\r");
 	MOVLW      70
 	MOVWF      ?lstr1__+0
 	MOVLW      82
@@ -123,96 +275,7 @@ _main:
 	MOVLW      ?lstr1__+0
 	MOVWF      FARG_printf_msg+0
 	CALL       _printf+0
-;_.c,77 :: 		while(1)
-L_main1:
-;_.c,80 :: 		ADCON0.GO=1;//inicia conversion
-	BSF        ADCON0+0, 1
-;_.c,81 :: 		while(ADCON0.GO);
-L_main3:
-	BTFSS      ADCON0+0, 1
-	GOTO       L_main4
-	GOTO       L_main3
-L_main4:
-;_.c,82 :: 		registro1=ADRESH & 0x03; //extraemos los bits del registro adresh
-	MOVLW      3
-	ANDWF      ADRESH+0, 0
-	MOVWF      _registro1+0
-;_.c,83 :: 		registro2=ADRESL;        //extraemos los bits del registro adresl
-	MOVF       ADRESL+0, 0
-	MOVWF      _registro2+0
-;_.c,88 :: 		if (RD0_bit && ctrl2==0){frecuency++;ctrl2=1;}
-	BTFSS      RD0_bit+0, BitPos(RD0_bit+0)
-	GOTO       L_main7
-	MOVF       _ctrl2+0, 0
-	XORLW      0
-	BTFSS      STATUS+0, 2
-	GOTO       L_main7
-L__main15:
-	INCF       _frecuency+0, 1
-	BTFSC      STATUS+0, 2
-	INCF       _frecuency+1, 1
-	MOVLW      1
-	MOVWF      _ctrl2+0
-	GOTO       L_main8
-L_main7:
-;_.c,89 :: 		else if (RD0_bit==0 && ctrl2==1){ctrl2=0;}
-	BTFSC      RD0_bit+0, BitPos(RD0_bit+0)
-	GOTO       L_main11
-	MOVF       _ctrl2+0, 0
-	XORLW      1
-	BTFSS      STATUS+0, 2
-	GOTO       L_main11
-L__main14:
-	CLRF       _ctrl2+0
-L_main11:
-L_main8:
-;_.c,91 :: 		if (ctrl==123)
-	MOVF       _ctrl+0, 0
-	XORLW      123
-	BTFSS      STATUS+0, 2
-	GOTO       L_main12
-;_.c,93 :: 		print=1;
-	MOVLW      1
-	MOVWF      _print+0
-;_.c,94 :: 		}
-L_main12:
-;_.c,97 :: 		if (print==1)
-	MOVF       _print+0, 0
-	XORLW      1
-	BTFSS      STATUS+0, 2
-	GOTO       L_main13
-;_.c,99 :: 		pasos= (registro1<<8)+registro2; //calculamos el numero de pasos
-	MOVF       _registro1+0, 0
-	MOVWF      R0+1
-	CLRF       R0+0
-	MOVF       _registro2+0, 0
-	ADDWF      R0+0, 1
-	BTFSC      STATUS+0, 0
-	INCF       R0+1, 1
-	MOVF       R0+0, 0
-	MOVWF      _pasos+0
-	MOVF       R0+1, 0
-	MOVWF      _pasos+1
-;_.c,100 :: 		resultado=pasos*resolucion;      //realizamos la conversion a voltaje
-	CALL       _word2double+0
-	MOVF       _resolucion+0, 0
-	MOVWF      R4+0
-	MOVF       _resolucion+1, 0
-	MOVWF      R4+1
-	MOVF       _resolucion+2, 0
-	MOVWF      R4+2
-	MOVF       _resolucion+3, 0
-	MOVWF      R4+3
-	CALL       _Mul_32x32_FP+0
-	MOVF       R0+0, 0
-	MOVWF      _resultado+0
-	MOVF       R0+1, 0
-	MOVWF      _resultado+1
-	MOVF       R0+2, 0
-	MOVWF      _resultado+2
-	MOVF       R0+3, 0
-	MOVWF      _resultado+3
-;_.c,101 :: 		IntToStr(frecuency, text);       //imprimimos el valor acumulado en TIM1L
+;_.c,105 :: 		IntToStr(frecuency, text);       //imprimimos el valor acumulado en TIM1L
 	MOVF       _frecuency+0, 0
 	MOVWF      FARG_IntToStr_input+0
 	MOVF       _frecuency+1, 0
@@ -220,11 +283,11 @@ L_main12:
 	MOVLW      _text+0
 	MOVWF      FARG_IntToStr_output+0
 	CALL       _IntToStr+0
-;_.c,102 :: 		printf(text);
+;_.c,106 :: 		printf(text);
 	MOVLW      _text+0
 	MOVWF      FARG_printf_msg+0
 	CALL       _printf+0
-;_.c,103 :: 		printf("HZ\r\n");
+;_.c,107 :: 		printf("HZ\r\n");
 	MOVLW      72
 	MOVWF      ?lstr2__+0
 	MOVLW      90
@@ -237,7 +300,7 @@ L_main12:
 	MOVLW      ?lstr2__+0
 	MOVWF      FARG_printf_msg+0
 	CALL       _printf+0
-;_.c,104 :: 		printf("AMPLITUD:\n\r   ");
+;_.c,108 :: 		printf("AMPLITUD:\n\r   ");
 	MOVLW      65
 	MOVWF      ?lstr3__+0
 	MOVLW      77
@@ -270,42 +333,42 @@ L_main12:
 	MOVLW      ?lstr3__+0
 	MOVWF      FARG_printf_msg+0
 	CALL       _printf+0
-;_.c,105 :: 		floatToStr_FixLen(resultado, text,5);
-	MOVF       _resultado+0, 0
+;_.c,109 :: 		floatToStr_FixLen(value, text,5);
+	MOVF       _value+0, 0
 	MOVWF      FARG_FloatToStr_FixLen_fnum+0
-	MOVF       _resultado+1, 0
+	MOVF       _value+1, 0
 	MOVWF      FARG_FloatToStr_FixLen_fnum+1
-	MOVF       _resultado+2, 0
+	MOVF       _value+2, 0
 	MOVWF      FARG_FloatToStr_FixLen_fnum+2
-	MOVF       _resultado+3, 0
+	MOVF       _value+3, 0
 	MOVWF      FARG_FloatToStr_FixLen_fnum+3
 	MOVLW      _text+0
 	MOVWF      FARG_FloatToStr_FixLen_str+0
 	MOVLW      5
 	MOVWF      FARG_FloatToStr_FixLen_len+0
 	CALL       _FloatToStr_FixLen+0
-;_.c,106 :: 		printf(text);
+;_.c,110 :: 		printf(text);
 	MOVLW      _text+0
 	MOVWF      FARG_printf_msg+0
 	CALL       _printf+0
-;_.c,107 :: 		printf("V");
+;_.c,111 :: 		printf("V");
 	MOVLW      86
 	MOVWF      ?lstr4__+0
 	CLRF       ?lstr4__+1
 	MOVLW      ?lstr4__+0
 	MOVWF      FARG_printf_msg+0
 	CALL       _printf+0
-;_.c,108 :: 		return 1;
+;_.c,112 :: 		return 1;
 	MOVLW      1
 	MOVWF      R0+0
 	MOVLW      0
 	MOVWF      R0+1
 	GOTO       L_end_main
-;_.c,109 :: 		}
-L_main13:
-;_.c,110 :: 		}
+;_.c,113 :: 		}
+L_main16:
+;_.c,114 :: 		}
 	GOTO       L_main1
-;_.c,111 :: 		}
+;_.c,115 :: 		}
 L_end_main:
 	GOTO       $+0
 ; end of _main

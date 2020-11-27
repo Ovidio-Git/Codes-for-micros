@@ -72,7 +72,7 @@ int main(void)
     TMR1L  = 0x00;        //registro de los segiundos 8 bits del timer1
 
     UART1_Init(9600);
-    printf("FRECUENCIA:\n\r");
+
 
     while(1)
     {
@@ -81,13 +81,18 @@ int main(void)
          while(ADCON0.GO);
          registro1=ADRESH & 0x03; //extraemos los bits del registro adresh
          registro2=ADRESL;        //extraemos los bits del registro adresl
-
+         pasos= (registro1<<8)+registro2; //calculamos el numero de pasos
+         resultado=pasos*resolucion;      //realizamos la conversion a voltaje
 
 
 
           if (RD0_bit && ctrl2==0){frecuency++;ctrl2=1;}
           else if (RD0_bit==0 && ctrl2==1){ctrl2=0;}
   
+          if (resultado>value && resultado <=5)
+          {
+             value=resultado;
+          }
           if (ctrl==123)
           {
              print=1;
@@ -96,13 +101,12 @@ int main(void)
 
           if (print==1)
          {
-            pasos= (registro1<<8)+registro2; //calculamos el numero de pasos
-            resultado=pasos*resolucion;      //realizamos la conversion a voltaje
+            printf("FRECUENCIA:\n\r");
             IntToStr(frecuency, text);       //imprimimos el valor acumulado en TIM1L
             printf(text);
             printf("HZ\r\n");
             printf("AMPLITUD:\n\r   ");
-            floatToStr_FixLen(resultado, text,5);
+            floatToStr_FixLen(value, text,5);
             printf(text);
             printf("V");
             return 1;
