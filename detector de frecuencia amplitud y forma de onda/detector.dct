@@ -240,6 +240,7 @@ csrc
 csrc_bit
 ctrl
 ctrl2
+ctrl3
 d
 d_a
 d_a_bit
@@ -313,6 +314,7 @@ equals_double
 f
 ferr
 ferr_bit
+fi
 fixsign32
 floattostr
 floattostr_fixlen
@@ -341,6 +343,7 @@ hextoshort
 hextoword
 hts
 hts_bit
+i
 ics_auto
 ics_off
 indf
@@ -401,6 +404,7 @@ memchr
 memcmp
 memcpy
 memmove
+memor
 memset
 msk
 msk0

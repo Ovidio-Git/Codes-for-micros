@@ -29,10 +29,10 @@ void main() {
 */
 
 
-unsigned char ctrl=0,ctrl2=0,frecu=0,print=0,text[6]={0};
-unsigned char registro1=0,registro2=0,temp=0;
+unsigned char ctrl=0,ctrl2=0,ctrl3=0,frecu=0,print=0,text[6]={0},fi=0;
+unsigned char registro1=0,registro2=0,temp=0,i=0;
 unsigned int frecuency = 0,pasos=0;
-float resolucion= 0.00488,resultado=0,value=0;
+float resolucion= 0.00488,resultado=0,value=0,memor[3];
 
 void printf(unsigned char msg[])
 {
@@ -83,11 +83,17 @@ int main(void)
          registro2=ADRESL;        //extraemos los bits del registro adresl
          pasos= (registro1<<8)+registro2; //calculamos el numero de pasos
          resultado=pasos*resolucion;      //realizamos la conversion a voltaje
+          memor[i]=resultado;
+          if (i<3){i++;}
 
+             if ( ctrl3==2 && (resultado>=value-(value*0.04)) && resultado <=5);
+          {
+            fi++;
+          }
 
-
+           ///////////////////////////////////////////////////////////////////
           if (RD0_bit && ctrl2==0){frecuency++;ctrl2=1;}
-          else if (RD0_bit==0 && ctrl2==1){ctrl2=0;}
+          else if (RD0_bit==0 && ctrl2==1){ctrl2=0;ctrl3++;}
   
           if (resultado>value && resultado <=5)
           {
@@ -95,12 +101,23 @@ int main(void)
           }
           if (ctrl==123)
           {
-             print=1;
+             INTCON.GIE = 0;        // Se deshabilitan todas las interrupciones
+             ByteToStr(fi,text);
+             printf(text);
+             print=1; return 0;
           }
 
-
+          /*
           if (print==1)
          {
+         
+            if (memor[0]==memor[1])
+            {
+            printf("FORMA:");
+            printf("RECTANGULAR")
+            }else ir ()
+            
+            
             printf("FRECUENCIA:\n\r");
             IntToStr(frecuency, text);       //imprimimos el valor acumulado en TIM1L
             printf(text);
@@ -110,6 +127,7 @@ int main(void)
             printf(text);
             printf("V");
             return 1;
-         }
+         } */
+         //////////////////////////////////////////////////////////////////////////////////77
     }
 }

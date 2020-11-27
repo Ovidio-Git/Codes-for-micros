@@ -36,7 +36,7 @@ L_interrupt0:
 	BSF        INTCON+0, 7
 ;_.c,54 :: 		}
 L_end_interrupt:
-L__interrupt22:
+L__interrupt26:
 	MOVF       ___savePCLATH+0, 0
 	MOVWF      PCLATH+0
 	SWAPF      ___saveSTATUS+0, 0
@@ -142,40 +142,63 @@ L_main4:
 	MOVWF      _resultado+2
 	MOVF       R0+3, 0
 	MOVWF      _resultado+3
-;_.c,89 :: 		if (RD0_bit && ctrl2==0){frecuency++;ctrl2=1;}
-	BTFSS      RD0_bit+0, BitPos(RD0_bit+0)
-	GOTO       L_main7
-	MOVF       _ctrl2+0, 0
-	XORLW      0
-	BTFSS      STATUS+0, 2
-	GOTO       L_main7
-L__main19:
-	INCF       _frecuency+0, 1
-	BTFSC      STATUS+0, 2
-	INCF       _frecuency+1, 1
-	MOVLW      1
-	MOVWF      _ctrl2+0
-	GOTO       L_main8
-L_main7:
-;_.c,90 :: 		else if (RD0_bit==0 && ctrl2==1){ctrl2=0;}
-	BTFSC      RD0_bit+0, BitPos(RD0_bit+0)
-	GOTO       L_main11
-	MOVF       _ctrl2+0, 0
-	XORLW      1
-	BTFSS      STATUS+0, 2
-	GOTO       L_main11
-L__main18:
-	CLRF       _ctrl2+0
-L_main11:
-L_main8:
-;_.c,92 :: 		if (resultado>value && resultado <=5)
-	MOVF       _resultado+0, 0
+;_.c,86 :: 		memor[i]=resultado;
+	MOVF       _i+0, 0
 	MOVWF      R4+0
-	MOVF       _resultado+1, 0
+	RLF        R4+0, 1
+	BCF        R4+0, 0
+	RLF        R4+0, 1
+	BCF        R4+0, 0
+	MOVF       R4+0, 0
+	ADDLW      _memor+0
+	MOVWF      FSR
+	MOVF       R0+0, 0
+	MOVWF      INDF+0
+	MOVF       R0+1, 0
+	INCF       FSR, 1
+	MOVWF      INDF+0
+	MOVF       R0+2, 0
+	INCF       FSR, 1
+	MOVWF      INDF+0
+	MOVF       R0+3, 0
+	INCF       FSR, 1
+	MOVWF      INDF+0
+;_.c,87 :: 		if (i<3){i++;}
+	MOVLW      3
+	SUBWF      _i+0, 0
+	BTFSC      STATUS+0, 0
+	GOTO       L_main5
+	INCF       _i+0, 1
+L_main5:
+;_.c,89 :: 		if ( ctrl3==2 && (resultado>=value-(value*0.04)) && resultado <=5);
+	MOVF       _ctrl3+0, 0
+	XORLW      2
+	BTFSS      STATUS+0, 2
+	GOTO       L_main8
+	MOVF       _value+0, 0
+	MOVWF      R0+0
+	MOVF       _value+1, 0
+	MOVWF      R0+1
+	MOVF       _value+2, 0
+	MOVWF      R0+2
+	MOVF       _value+3, 0
+	MOVWF      R0+3
+	MOVLW      10
+	MOVWF      R4+0
+	MOVLW      215
 	MOVWF      R4+1
-	MOVF       _resultado+2, 0
+	MOVLW      35
 	MOVWF      R4+2
-	MOVF       _resultado+3, 0
+	MOVLW      122
+	MOVWF      R4+3
+	CALL       _Mul_32x32_FP+0
+	MOVF       R0+0, 0
+	MOVWF      R4+0
+	MOVF       R0+1, 0
+	MOVWF      R4+1
+	MOVF       R0+2, 0
+	MOVWF      R4+2
+	MOVF       R0+3, 0
 	MOVWF      R4+3
 	MOVF       _value+0, 0
 	MOVWF      R0+0
@@ -185,14 +208,31 @@ L_main8:
 	MOVWF      R0+2
 	MOVF       _value+3, 0
 	MOVWF      R0+3
+	CALL       _Sub_32x32_FP+0
+	MOVF       R0+0, 0
+	MOVWF      R4+0
+	MOVF       R0+1, 0
+	MOVWF      R4+1
+	MOVF       R0+2, 0
+	MOVWF      R4+2
+	MOVF       R0+3, 0
+	MOVWF      R4+3
+	MOVF       _resultado+0, 0
+	MOVWF      R0+0
+	MOVF       _resultado+1, 0
+	MOVWF      R0+1
+	MOVF       _resultado+2, 0
+	MOVWF      R0+2
+	MOVF       _resultado+3, 0
+	MOVWF      R0+3
 	CALL       _Compare_Double+0
 	MOVLW      1
-	BTFSC      STATUS+0, 0
+	BTFSS      STATUS+0, 0
 	MOVLW      0
 	MOVWF      R0+0
 	MOVF       R0+0, 0
 	BTFSC      STATUS+0, 2
-	GOTO       L_main14
+	GOTO       L_main8
 	MOVF       _resultado+0, 0
 	MOVWF      R4+0
 	MOVF       _resultado+1, 0
@@ -216,9 +256,89 @@ L_main8:
 	MOVWF      R0+0
 	MOVF       R0+0, 0
 	BTFSC      STATUS+0, 2
-	GOTO       L_main14
-L__main17:
-;_.c,94 :: 		value=resultado;
+	GOTO       L_main8
+L__main23:
+L_main8:
+;_.c,91 :: 		fi++;
+	INCF       _fi+0, 1
+;_.c,95 :: 		if (RD0_bit && ctrl2==0){frecuency++;ctrl2=1;}
+	BTFSS      RD0_bit+0, BitPos(RD0_bit+0)
+	GOTO       L_main11
+	MOVF       _ctrl2+0, 0
+	XORLW      0
+	BTFSS      STATUS+0, 2
+	GOTO       L_main11
+L__main22:
+	INCF       _frecuency+0, 1
+	BTFSC      STATUS+0, 2
+	INCF       _frecuency+1, 1
+	MOVLW      1
+	MOVWF      _ctrl2+0
+	GOTO       L_main12
+L_main11:
+;_.c,96 :: 		else if (RD0_bit==0 && ctrl2==1){ctrl2=0;ctrl3++;}
+	BTFSC      RD0_bit+0, BitPos(RD0_bit+0)
+	GOTO       L_main15
+	MOVF       _ctrl2+0, 0
+	XORLW      1
+	BTFSS      STATUS+0, 2
+	GOTO       L_main15
+L__main21:
+	CLRF       _ctrl2+0
+	INCF       _ctrl3+0, 1
+L_main15:
+L_main12:
+;_.c,98 :: 		if (resultado>value && resultado <=5)
+	MOVF       _resultado+0, 0
+	MOVWF      R4+0
+	MOVF       _resultado+1, 0
+	MOVWF      R4+1
+	MOVF       _resultado+2, 0
+	MOVWF      R4+2
+	MOVF       _resultado+3, 0
+	MOVWF      R4+3
+	MOVF       _value+0, 0
+	MOVWF      R0+0
+	MOVF       _value+1, 0
+	MOVWF      R0+1
+	MOVF       _value+2, 0
+	MOVWF      R0+2
+	MOVF       _value+3, 0
+	MOVWF      R0+3
+	CALL       _Compare_Double+0
+	MOVLW      1
+	BTFSC      STATUS+0, 0
+	MOVLW      0
+	MOVWF      R0+0
+	MOVF       R0+0, 0
+	BTFSC      STATUS+0, 2
+	GOTO       L_main18
+	MOVF       _resultado+0, 0
+	MOVWF      R4+0
+	MOVF       _resultado+1, 0
+	MOVWF      R4+1
+	MOVF       _resultado+2, 0
+	MOVWF      R4+2
+	MOVF       _resultado+3, 0
+	MOVWF      R4+3
+	MOVLW      0
+	MOVWF      R0+0
+	MOVLW      0
+	MOVWF      R0+1
+	MOVLW      32
+	MOVWF      R0+2
+	MOVLW      129
+	MOVWF      R0+3
+	CALL       _Compare_Double+0
+	MOVLW      1
+	BTFSS      STATUS+0, 0
+	MOVLW      0
+	MOVWF      R0+0
+	MOVF       R0+0, 0
+	BTFSC      STATUS+0, 2
+	GOTO       L_main18
+L__main20:
+;_.c,100 :: 		value=resultado;
 	MOVF       _resultado+0, 0
 	MOVWF      _value+0
 	MOVF       _resultado+1, 0
@@ -227,148 +347,36 @@ L__main17:
 	MOVWF      _value+2
 	MOVF       _resultado+3, 0
 	MOVWF      _value+3
-;_.c,95 :: 		}
-L_main14:
-;_.c,96 :: 		if (ctrl==123)
+;_.c,101 :: 		}
+L_main18:
+;_.c,102 :: 		if (ctrl==123)
 	MOVF       _ctrl+0, 0
 	XORLW      123
 	BTFSS      STATUS+0, 2
-	GOTO       L_main15
-;_.c,98 :: 		print=1;
-	MOVLW      1
-	MOVWF      _print+0
-;_.c,99 :: 		}
-L_main15:
-;_.c,102 :: 		if (print==1)
-	MOVF       _print+0, 0
-	XORLW      1
-	BTFSS      STATUS+0, 2
-	GOTO       L_main16
-;_.c,104 :: 		printf("FRECUENCIA:\n\r");
-	MOVLW      70
-	MOVWF      ?lstr1__+0
-	MOVLW      82
-	MOVWF      ?lstr1__+1
-	MOVLW      69
-	MOVWF      ?lstr1__+2
-	MOVLW      67
-	MOVWF      ?lstr1__+3
-	MOVLW      85
-	MOVWF      ?lstr1__+4
-	MOVLW      69
-	MOVWF      ?lstr1__+5
-	MOVLW      78
-	MOVWF      ?lstr1__+6
-	MOVLW      67
-	MOVWF      ?lstr1__+7
-	MOVLW      73
-	MOVWF      ?lstr1__+8
-	MOVLW      65
-	MOVWF      ?lstr1__+9
-	MOVLW      58
-	MOVWF      ?lstr1__+10
-	MOVLW      10
-	MOVWF      ?lstr1__+11
-	MOVLW      13
-	MOVWF      ?lstr1__+12
-	CLRF       ?lstr1__+13
-	MOVLW      ?lstr1__+0
-	MOVWF      FARG_printf_msg+0
-	CALL       _printf+0
-;_.c,105 :: 		IntToStr(frecuency, text);       //imprimimos el valor acumulado en TIM1L
-	MOVF       _frecuency+0, 0
-	MOVWF      FARG_IntToStr_input+0
-	MOVF       _frecuency+1, 0
-	MOVWF      FARG_IntToStr_input+1
+	GOTO       L_main19
+;_.c,104 :: 		INTCON.GIE = 0;        // Se deshabilitan todas las interrupciones
+	BCF        INTCON+0, 7
+;_.c,105 :: 		ByteToStr(fi,text);
+	MOVF       _fi+0, 0
+	MOVWF      FARG_ByteToStr_input+0
 	MOVLW      _text+0
-	MOVWF      FARG_IntToStr_output+0
-	CALL       _IntToStr+0
+	MOVWF      FARG_ByteToStr_output+0
+	CALL       _ByteToStr+0
 ;_.c,106 :: 		printf(text);
 	MOVLW      _text+0
 	MOVWF      FARG_printf_msg+0
 	CALL       _printf+0
-;_.c,107 :: 		printf("HZ\r\n");
-	MOVLW      72
-	MOVWF      ?lstr2__+0
-	MOVLW      90
-	MOVWF      ?lstr2__+1
-	MOVLW      13
-	MOVWF      ?lstr2__+2
-	MOVLW      10
-	MOVWF      ?lstr2__+3
-	CLRF       ?lstr2__+4
-	MOVLW      ?lstr2__+0
-	MOVWF      FARG_printf_msg+0
-	CALL       _printf+0
-;_.c,108 :: 		printf("AMPLITUD:\n\r   ");
-	MOVLW      65
-	MOVWF      ?lstr3__+0
-	MOVLW      77
-	MOVWF      ?lstr3__+1
-	MOVLW      80
-	MOVWF      ?lstr3__+2
-	MOVLW      76
-	MOVWF      ?lstr3__+3
-	MOVLW      73
-	MOVWF      ?lstr3__+4
-	MOVLW      84
-	MOVWF      ?lstr3__+5
-	MOVLW      85
-	MOVWF      ?lstr3__+6
-	MOVLW      68
-	MOVWF      ?lstr3__+7
-	MOVLW      58
-	MOVWF      ?lstr3__+8
-	MOVLW      10
-	MOVWF      ?lstr3__+9
-	MOVLW      13
-	MOVWF      ?lstr3__+10
-	MOVLW      32
-	MOVWF      ?lstr3__+11
-	MOVLW      32
-	MOVWF      ?lstr3__+12
-	MOVLW      32
-	MOVWF      ?lstr3__+13
-	CLRF       ?lstr3__+14
-	MOVLW      ?lstr3__+0
-	MOVWF      FARG_printf_msg+0
-	CALL       _printf+0
-;_.c,109 :: 		floatToStr_FixLen(value, text,5);
-	MOVF       _value+0, 0
-	MOVWF      FARG_FloatToStr_FixLen_fnum+0
-	MOVF       _value+1, 0
-	MOVWF      FARG_FloatToStr_FixLen_fnum+1
-	MOVF       _value+2, 0
-	MOVWF      FARG_FloatToStr_FixLen_fnum+2
-	MOVF       _value+3, 0
-	MOVWF      FARG_FloatToStr_FixLen_fnum+3
-	MOVLW      _text+0
-	MOVWF      FARG_FloatToStr_FixLen_str+0
-	MOVLW      5
-	MOVWF      FARG_FloatToStr_FixLen_len+0
-	CALL       _FloatToStr_FixLen+0
-;_.c,110 :: 		printf(text);
-	MOVLW      _text+0
-	MOVWF      FARG_printf_msg+0
-	CALL       _printf+0
-;_.c,111 :: 		printf("V");
-	MOVLW      86
-	MOVWF      ?lstr4__+0
-	CLRF       ?lstr4__+1
-	MOVLW      ?lstr4__+0
-	MOVWF      FARG_printf_msg+0
-	CALL       _printf+0
-;_.c,112 :: 		return 1;
+;_.c,107 :: 		print=1; return 0;
 	MOVLW      1
-	MOVWF      R0+0
-	MOVLW      0
-	MOVWF      R0+1
+	MOVWF      _print+0
+	CLRF       R0+0
+	CLRF       R0+1
 	GOTO       L_end_main
-;_.c,113 :: 		}
-L_main16:
-;_.c,114 :: 		}
+;_.c,108 :: 		}
+L_main19:
+;_.c,132 :: 		}
 	GOTO       L_main1
-;_.c,115 :: 		}
+;_.c,133 :: 		}
 L_end_main:
 	GOTO       $+0
 ; end of _main
