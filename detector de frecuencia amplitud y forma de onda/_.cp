@@ -1,15 +1,17 @@
 #line 1 "D:/CODES 2.0/detector de frecuencia amplitud y forma de onda/_.c"
 
-unsigned char ctrl=0,ctrl2=0,frecu=0,print=0,text[6]={0};
-unsigned char registro1=0,registro2=0,temp=0,i=0,fi=0;
-unsigned int frecuency = 0,pasos=0,aux=0;
+
+unsigned char ctrl=0,ctrl2=0,print=0,text[6]={0};
+unsigned char registro1=0,registro2=0,i=0,fi=0,aux=0;
+unsigned int frecuency = 0,pasos=0;
 float resolucion= 0.00488,resultado=0,value=0,memor[6]={0};
+
+
 
 void printf(unsigned char msg[])
 {
  UART1_Write_Text(msg);
 }
-
 
 
 
@@ -44,9 +46,9 @@ int main(void)
 
  UART1_Init(9600);
 
-
  while(1)
  {
+
 
  ADCON0.GO=1;
  while(ADCON0.GO);
@@ -55,17 +57,32 @@ int main(void)
  pasos= (registro1<<8)+registro2;
  resultado=pasos*resolucion;
 
-
  memor[i]=resultado;
  if (i<3){i++;}
 
 
+ if (RD0_bit && ctrl2==0)
+ {
+ frecuency++;
+ ctrl2=1;
+ }
+ else if (RD0_bit==0 && ctrl2==1)
+ {
+ ctrl2=0;
+ aux++;
+ }
 
- if (RD0_bit && ctrl2==0){frecuency++;ctrl2=1;}
- else if (RD0_bit==0 && ctrl2==1){ctrl2=0;aux++;}
- if (ctrl2==1 && aux==0 && resultado<memor[4] && fi<3){memor[5]+=1;}
+
+
+
+ if (ctrl2==1 && aux==0 && resultado<memor[4] && fi<3)
+ {
+ memor[5]+=1;
+ }
  memor[4]=resultado;
  fi++;
+
+
  if (resultado>value && resultado <=5)
  {
  value=resultado;
@@ -76,7 +93,6 @@ int main(void)
  {
  INTCON.GIE = 0;
  print=1;
-
  }
 
 
@@ -101,13 +117,11 @@ int main(void)
  printf("\n\rFRECUENCIA:\n\r");
  IntToStr(frecuency, text);
  printf(text);
- printf("HZ\r\n");
- printf("AMPLITUD:\n\r   ");
+ printf("HZ\r\nAMPLITUD:");
  floatToStr_FixLen(value, text,5);
  printf(text);
  printf("V");
  return 1;
  }
-
  }
 }

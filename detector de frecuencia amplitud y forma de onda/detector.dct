@@ -318,7 +318,6 @@ fi
 fixsign32
 floattostr
 floattostr_fixlen
-frecu
 frecuency
 fsr
 fsrptr
@@ -798,7 +797,6 @@ t2ckps0_bit
 t2ckps1
 t2ckps1_bit
 t2con
-temp
 text
 tmr0
 tmr0ie
