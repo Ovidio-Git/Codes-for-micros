@@ -71,6 +71,7 @@ ans9
 ans9_bit
 ansel
 anselh
+aux
 b0
 b1
 b2
@@ -240,7 +241,6 @@ csrc
 csrc_bit
 ctrl
 ctrl2
-ctrl3
 d
 d_a
 d_a_bit

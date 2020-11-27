@@ -1,9 +1,9 @@
 #line 1 "D:/CODES 2.0/detector de frecuencia amplitud y forma de onda/_.c"
-#line 32 "D:/CODES 2.0/detector de frecuencia amplitud y forma de onda/_.c"
-unsigned char ctrl=0,ctrl2=0,ctrl3=0,frecu=0,print=0,text[6]={0},fi=0;
-unsigned char registro1=0,registro2=0,temp=0,i=0;
-unsigned int frecuency = 0,pasos=0;
-float resolucion= 0.00488,resultado=0,value=0,memor[3];
+
+unsigned char ctrl=0,ctrl2=0,frecu=0,print=0,text[6]={0};
+unsigned char registro1=0,registro2=0,temp=0,i=0,fi=0;
+unsigned int frecuency = 0,pasos=0,aux=0;
+float resolucion= 0.00488,resultado=0,value=0,memor[6]={0};
 
 void printf(unsigned char msg[])
 {
@@ -54,29 +54,60 @@ int main(void)
  registro2=ADRESL;
  pasos= (registro1<<8)+registro2;
  resultado=pasos*resolucion;
+
+
  memor[i]=resultado;
  if (i<3){i++;}
 
- if ( ctrl3==2 && (resultado>=value-(value*0.04)) && resultado <=5);
- {
- fi++;
- }
 
 
  if (RD0_bit && ctrl2==0){frecuency++;ctrl2=1;}
- else if (RD0_bit==0 && ctrl2==1){ctrl2=0;ctrl3++;}
-
+ else if (RD0_bit==0 && ctrl2==1){ctrl2=0;aux++;}
+ if (ctrl2==1 && aux==0 && resultado<memor[4] && fi<3){memor[5]+=1;}
+ memor[4]=resultado;
+ fi++;
  if (resultado>value && resultado <=5)
  {
  value=resultado;
  }
+
+
  if (ctrl==123)
  {
  INTCON.GIE = 0;
- ByteToStr(fi,text);
- printf(text);
- print=1; return 0;
+ print=1;
+
  }
-#line 132 "D:/CODES 2.0/detector de frecuencia amplitud y forma de onda/_.c"
+
+
+ if (print==1)
+ {
+ if (memor[0]==memor[1])
+ {
+ printf("FORMA:");
+ printf("RECTANGULAR");
+ }
+ else if (memor[5]>=1)
+ {
+ printf("FORMA:");
+ printf("TRIANGULAR") ;
+ }
+ else
+ {
+ printf("FORMA:");
+ printf("SENOIDAL");
+ }
+
+ printf("\n\rFRECUENCIA:\n\r");
+ IntToStr(frecuency, text);
+ printf(text);
+ printf("HZ\r\n");
+ printf("AMPLITUD:\n\r   ");
+ floatToStr_FixLen(value, text,5);
+ printf(text);
+ printf("V");
+ return 1;
+ }
+
  }
 }
