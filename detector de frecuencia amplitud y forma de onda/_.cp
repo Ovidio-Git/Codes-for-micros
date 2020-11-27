@@ -37,7 +37,7 @@ int main(void)
  OPTION_REG = 0x24;
  T1CON = 0x03;
  TMR0 = 0;
-
+ OPTION_REG.T0CS = 0;
  INTCON = 0xE0;
  TMR1H = 0x00;
  TMR1L = 0x00;
@@ -53,13 +53,10 @@ int main(void)
  registro1=ADRESH & 0x03;
  registro2=ADRESL;
 
- while(RD0_bit==1);
- OPTION_REG.T0CS=0;
- while(RD0_bit==0);
- OPTION_REG.T0CS=1;
 
 
- if (RD0_bit==1 && ctrl2==0){frecuency++;ctrl2=1;}
+
+ if (RD0_bit && ctrl2==0){frecuency++;ctrl2=1;}
  else if (RD0_bit==0 && ctrl2==1){ctrl2=0;}
 
  if (ctrl==123)

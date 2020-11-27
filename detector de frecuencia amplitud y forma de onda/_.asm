@@ -36,7 +36,7 @@ L_interrupt0:
 	BSF        INTCON+0, 7
 ;_.c,54 :: 		}
 L_end_interrupt:
-L__interrupt22:
+L__interrupt18:
 	MOVF       ___savePCLATH+0, 0
 	MOVWF      PCLATH+0
 	SWAPF      ___saveSTATUS+0, 0
@@ -78,6 +78,8 @@ _main:
 	MOVWF      T1CON+0
 ;_.c,68 :: 		TMR0  = 0;           //inicializando timer0 en 0 para segurar que este limpio
 	CLRF       TMR0+0
+;_.c,69 :: 		OPTION_REG.T0CS = 0;  //se habilita el timer 0
+	BCF        OPTION_REG+0, 5
 ;_.c,70 :: 		INTCON =   0xE0;      //habilitando las interrupciones del timer0
 	MOVLW      224
 	MOVWF      INTCON+0
@@ -138,64 +140,48 @@ L_main4:
 ;_.c,83 :: 		registro2=ADRESL;        //extraemos los bits del registro adresl
 	MOVF       ADRESL+0, 0
 	MOVWF      _registro2+0
-;_.c,85 :: 		while(RD0_bit==1);
-L_main5:
+;_.c,88 :: 		if (RD0_bit && ctrl2==0){frecuency++;ctrl2=1;}
 	BTFSS      RD0_bit+0, BitPos(RD0_bit+0)
-	GOTO       L_main6
-	GOTO       L_main5
-L_main6:
-;_.c,86 :: 		OPTION_REG.T0CS=0;
-	BCF        OPTION_REG+0, 5
-;_.c,87 :: 		while(RD0_bit==0);
-L_main7:
-	BTFSC      RD0_bit+0, BitPos(RD0_bit+0)
-	GOTO       L_main8
 	GOTO       L_main7
-L_main8:
-;_.c,88 :: 		OPTION_REG.T0CS=1;
-	BSF        OPTION_REG+0, 5
-;_.c,91 :: 		if (RD0_bit==1 && ctrl2==0){frecuency++;ctrl2=1;}
-	BTFSS      RD0_bit+0, BitPos(RD0_bit+0)
-	GOTO       L_main11
 	MOVF       _ctrl2+0, 0
 	XORLW      0
 	BTFSS      STATUS+0, 2
-	GOTO       L_main11
-L__main19:
+	GOTO       L_main7
+L__main15:
 	INCF       _frecuency+0, 1
 	BTFSC      STATUS+0, 2
 	INCF       _frecuency+1, 1
 	MOVLW      1
 	MOVWF      _ctrl2+0
-	GOTO       L_main12
-L_main11:
-;_.c,92 :: 		else if (RD0_bit==0 && ctrl2==1){ctrl2=0;}
+	GOTO       L_main8
+L_main7:
+;_.c,89 :: 		else if (RD0_bit==0 && ctrl2==1){ctrl2=0;}
 	BTFSC      RD0_bit+0, BitPos(RD0_bit+0)
-	GOTO       L_main15
+	GOTO       L_main11
 	MOVF       _ctrl2+0, 0
 	XORLW      1
 	BTFSS      STATUS+0, 2
-	GOTO       L_main15
-L__main18:
+	GOTO       L_main11
+L__main14:
 	CLRF       _ctrl2+0
-L_main15:
-L_main12:
-;_.c,94 :: 		if (ctrl==123)
+L_main11:
+L_main8:
+;_.c,91 :: 		if (ctrl==123)
 	MOVF       _ctrl+0, 0
 	XORLW      123
 	BTFSS      STATUS+0, 2
-	GOTO       L_main16
-;_.c,96 :: 		print=1;
+	GOTO       L_main12
+;_.c,93 :: 		print=1;
 	MOVLW      1
 	MOVWF      _print+0
-;_.c,97 :: 		}
-L_main16:
-;_.c,100 :: 		if (print==1)
+;_.c,94 :: 		}
+L_main12:
+;_.c,97 :: 		if (print==1)
 	MOVF       _print+0, 0
 	XORLW      1
 	BTFSS      STATUS+0, 2
-	GOTO       L_main17
-;_.c,102 :: 		pasos= (registro1<<8)+registro2; //calculamos el numero de pasos
+	GOTO       L_main13
+;_.c,99 :: 		pasos= (registro1<<8)+registro2; //calculamos el numero de pasos
 	MOVF       _registro1+0, 0
 	MOVWF      R0+1
 	CLRF       R0+0
@@ -207,7 +193,7 @@ L_main16:
 	MOVWF      _pasos+0
 	MOVF       R0+1, 0
 	MOVWF      _pasos+1
-;_.c,103 :: 		resultado=pasos*resolucion;      //realizamos la conversion a voltaje
+;_.c,100 :: 		resultado=pasos*resolucion;      //realizamos la conversion a voltaje
 	CALL       _word2double+0
 	MOVF       _resolucion+0, 0
 	MOVWF      R4+0
@@ -226,7 +212,7 @@ L_main16:
 	MOVWF      _resultado+2
 	MOVF       R0+3, 0
 	MOVWF      _resultado+3
-;_.c,104 :: 		IntToStr(frecuency, text);       //imprimimos el valor acumulado en TIM1L
+;_.c,101 :: 		IntToStr(frecuency, text);       //imprimimos el valor acumulado en TIM1L
 	MOVF       _frecuency+0, 0
 	MOVWF      FARG_IntToStr_input+0
 	MOVF       _frecuency+1, 0
@@ -234,11 +220,11 @@ L_main16:
 	MOVLW      _text+0
 	MOVWF      FARG_IntToStr_output+0
 	CALL       _IntToStr+0
-;_.c,105 :: 		printf(text);
+;_.c,102 :: 		printf(text);
 	MOVLW      _text+0
 	MOVWF      FARG_printf_msg+0
 	CALL       _printf+0
-;_.c,106 :: 		printf("HZ\r\n");
+;_.c,103 :: 		printf("HZ\r\n");
 	MOVLW      72
 	MOVWF      ?lstr2__+0
 	MOVLW      90
@@ -251,7 +237,7 @@ L_main16:
 	MOVLW      ?lstr2__+0
 	MOVWF      FARG_printf_msg+0
 	CALL       _printf+0
-;_.c,107 :: 		printf("AMPLITUD:\n\r   ");
+;_.c,104 :: 		printf("AMPLITUD:\n\r   ");
 	MOVLW      65
 	MOVWF      ?lstr3__+0
 	MOVLW      77
@@ -284,7 +270,7 @@ L_main16:
 	MOVLW      ?lstr3__+0
 	MOVWF      FARG_printf_msg+0
 	CALL       _printf+0
-;_.c,108 :: 		floatToStr_FixLen(resultado, text,5);
+;_.c,105 :: 		floatToStr_FixLen(resultado, text,5);
 	MOVF       _resultado+0, 0
 	MOVWF      FARG_FloatToStr_FixLen_fnum+0
 	MOVF       _resultado+1, 0
@@ -298,28 +284,28 @@ L_main16:
 	MOVLW      5
 	MOVWF      FARG_FloatToStr_FixLen_len+0
 	CALL       _FloatToStr_FixLen+0
-;_.c,109 :: 		printf(text);
+;_.c,106 :: 		printf(text);
 	MOVLW      _text+0
 	MOVWF      FARG_printf_msg+0
 	CALL       _printf+0
-;_.c,110 :: 		printf("V");
+;_.c,107 :: 		printf("V");
 	MOVLW      86
 	MOVWF      ?lstr4__+0
 	CLRF       ?lstr4__+1
 	MOVLW      ?lstr4__+0
 	MOVWF      FARG_printf_msg+0
 	CALL       _printf+0
-;_.c,111 :: 		return 1;
+;_.c,108 :: 		return 1;
 	MOVLW      1
 	MOVWF      R0+0
 	MOVLW      0
 	MOVWF      R0+1
 	GOTO       L_end_main
-;_.c,112 :: 		}
-L_main17:
-;_.c,113 :: 		}
+;_.c,109 :: 		}
+L_main13:
+;_.c,110 :: 		}
 	GOTO       L_main1
-;_.c,114 :: 		}
+;_.c,111 :: 		}
 L_end_main:
 	GOTO       $+0
 ; end of _main

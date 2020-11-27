@@ -66,7 +66,7 @@ int main(void)
     OPTION_REG = 0x24;    //configurando timer0 como temporizador con un preescalador de 1:32
     T1CON = 0x03;        //configurando timer1 como contador
     TMR0  = 0;           //inicializando timer0 en 0 para segurar que este limpio
-    //OPTION_REG.T0CS = 0;  //se habilita el timer 0
+    OPTION_REG.T0CS = 0;  //se habilita el timer 0
     INTCON =   0xE0;      //habilitando las interrupciones del timer0
     TMR1H  = 0x00;        //registro de los primeros 8 bits del timer1 se llena ya que solo trabajaremos con TMR1L
     TMR1L  = 0x00;        //registro de los segiundos 8 bits del timer1
@@ -82,13 +82,10 @@ int main(void)
          registro1=ADRESH & 0x03; //extraemos los bits del registro adresh
          registro2=ADRESL;        //extraemos los bits del registro adresl
 
-          while(RD0_bit==1);
-          OPTION_REG.T0CS=0;
-          while(RD0_bit==0);
-          OPTION_REG.T0CS=1;
 
 
-          if (RD0_bit==1 && ctrl2==0){frecuency++;ctrl2=1;}
+
+          if (RD0_bit && ctrl2==0){frecuency++;ctrl2=1;}
           else if (RD0_bit==0 && ctrl2==1){ctrl2=0;}
   
           if (ctrl==123)
