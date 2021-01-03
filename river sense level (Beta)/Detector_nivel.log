@@ -1,0 +1,17 @@
+0	1	mikroCPIC1618.exe -MSF -DBG -pP18F4550 -RA -GC -Y -DL -O11111114 -fo48 -N"D:\CODES 2.0\Detector nivel del rio\Detector_nivel.mcppi" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Defs\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\uses\P18\" -SP"D:\CODES 2.0\Detector nivel del rio\" -SP"C:\Users\OVIDIO\Nueva carpeta\" -IP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\uses\P18\" "Detector_nivel.c" "__Lib_Math.mcl" "__Lib_MathDouble.mcl" "__Lib_System.mcl" "__Lib_Delays.mcl" "__Lib_CType.mcl" "__Lib_CString.mcl" "__Lib_Sprintf.mcl" "__Lib_UART_c67.mcl"	 
+hint: 0	1139	Available RAM: 2027 [bytes], Available ROM: 32768 [bytes]	 
+diagnostics: 0	122	Compilation Started	P18F4550.c
+diagnostics: 1606	123	Compiled Successfully	P18F4550.c
+diagnostics: 0	122	Compilation Started	__Lib_Delays.c
+diagnostics: 172	123	Compiled Successfully	__Lib_Delays.c
+diagnostics: 0	122	Compilation Started	Detector_nivel.c
+warning: 85	1503	Result is not defined in function: 'main'	Detector_nivel.c
+diagnostics: 85	123	Compiled Successfully	Detector_nivel.c
+diagnostics: 0	127	All files Compiled in 1578 ms	 
+hint: 0	1144	Used RAM (bytes): 255 (13%)  Free RAM (bytes): 1772 (87%)	Used RAM (bytes): 255 (13%)  Free RAM (bytes): 1772 (87%)
+hint: 0	1144	Used ROM (bytes): 1414 (4%)  Free ROM (bytes): 31354 (96%)	Used ROM (bytes): 1414 (4%)  Free ROM (bytes): 31354 (96%)
+diagnostics: 0	125	Project Linked Successfully	Detector_nivel.mcppi
+hint: 0	1004	COFF file successfully generated	COFF file successfully generated
+diagnostics: 0	128	Linked in 797 ms	 
+diagnostics: 0	129	Project 'Detector_nivel.mcppi' completed: 2719 ms	 
+diagnostics: 0	103	Finished successfully: 18 dic. 2020, 09:12:45	Detector_nivel.mcppi
